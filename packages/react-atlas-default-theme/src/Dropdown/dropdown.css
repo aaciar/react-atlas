@@ -6,18 +6,17 @@
 
 .content {
   composes: clearfix from '../styles.css';
-  composes: rounded from '../styles.css';
   composes: bg-white from '../styles.css';
   composes: z4 from '../styles.css';
   composes: cursor-pointer from '../styles.css';
+  composes: default-text from '../styles.css';
   text-align: left;
   left: 0;
-  overflow-y: auto;
-  box-shadow:  0 2px 3px rgba(0, 0, 0, 0.075), 0 0 0 1px rgba(0,0,0,0.1);
 }
 
 .content:hover {
   text-decoration: none;
+  border: none;
 }
 
 .inactive {
@@ -25,30 +24,51 @@
   display: none;
 
 }
-
-.active {
-  composes: content;
+.active button {
+  border: 1px solid #00a7e1;
+  border-radius: .25rem .25rem 0 0;
 }
 
 .list {
   composes: pad-0 from '../styles.css';
   composes: marg-0 from '../styles.css';
+  composes: bg-white from '../styles.css';
+  composes: default-border-left from '../styles.css';
+  composes: default-border-right from '../styles.css';
+  composes: default-border-bottom from '../styles.css';
+  composes: primary-border-top from '../styles.css';
+  composes: rounded-bottom from '../styles.css';
+  position:absolute;
+  left: 0;
+  top: 46px;
+  z-index: 100;
   list-style: none;
   transition: height 1s;
-  max-height: 250px; 
+  max-height: 250px;
   overflow: auto;
+  animation-duration: 3s;
+  animation-timing-function: ease;
+  animation-name: slidein;
+  max-width: 99%;
 }
-
 .item {
   composes: pad-v-1 from '../styles.css';
   composes: pad-h-2 from '../styles.css';
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
-
 .item:hover {
   text-decoration: none;
   background-color: #E6E6E6;
 }
-
+.firstChild {
+  margin-top: 5px;
+}
+.lastChild {
+  margin-bottom: 5px;
+}
 .arrow {
   width: 0;
   height: 0;
@@ -57,29 +77,40 @@
   border-color: #000000 transparent transparent transparent;
   float: right;
   margin-top: 0.25rem;
+  margin-left: 0.25rem;
 }
 
 .dropdown-button {
-  composes: bg-white from '../styles.css';
+  border: 1px solid #999;
+  background-color: white !important;
+  text-transform: none !important;
   min-width: 100%;
-  padding-left: 0px;
   padding-left: 0.5rem;
   text-align: left;
   white-space: nowrap;
-  text-overflow: ellipsis;
   height: 1.8rem;
   line-height: normal;
-  padding-top: .5rem;
+  padding-top: .45rem;
 }
-
 .dropdown-button:hover {
-  background-color: #E6E6E6;
+  border-color: #666;
+  background-color: #e6e6e6 !important;
+  color: #666 !important;
+}
+.dropdown-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  float: left;
 }
 
 .selected {
   composes: pad-v-1 from '../styles.css';
   composes: pad-h-2 from '../styles.css';
-  composes: bg-default from '../styles.css';
+  composes: bg-gray from '../styles.css';
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .selected:hover {
