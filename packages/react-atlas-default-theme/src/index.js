@@ -7,5 +7,6 @@ export { InputStyle } from "./Input";
 export { RadioStyle } from "./Radio";
 export { RadioGroupStyle } from "./RadioGroup";
 export { TableStyle } from "./Table";
+export { TableHeaderStyle } from "./TableHeader";
 export { SwitchStyle } from "./Switch";
 export { TooltipStyle } from "./Tooltip";
