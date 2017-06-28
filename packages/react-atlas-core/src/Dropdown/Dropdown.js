@@ -73,53 +73,42 @@ class Dropdown extends React.PureComponent {
     this.state.onChange(selected);
   };
 
-  _measureHeader() {
-    const width = this.refs.buttonNode(this.logWelcomeLayout);
-
-    console.log(width)
-    //this.wrapperRef.measure((ox, width) => {
-    //  this.setState({optionWidth: width});
-    //});
-    //console.log(this.state.optionWidth)
-  };
-
   render() {
     const { children, className, ...props } = this.props;
     const active = this.state.active;
-   const classes = cx(
-    {
-      "content": true,
-      "active": active,
-      "container": true
-    });
-
+    const classes = cx(
+      {
+        "content": true,
+        "active": active,
+        "container": true
+      });
     const bound_children = children.map((child, i) => {
       let childrenLength = children.length;
       let kid = "";
       switch (true) {
         case i === 0 && i === (childrenLength -1) && i != this.state.index:
-          kid = <li key={i} styleName={"item firstChild lastChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"item firstChild lastChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i === 0 && i !== (childrenLength -1) && i != this.state.index:
-          kid = <li key={i} styleName={"item firstChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"item firstChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i === 0 && i === (childrenLength -1) && i === this.state.index:
-          kid = <li key={i} styleName={"selected firstChild lastChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"selected firstChild lastChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i === 0 && i !== (childrenLength - 1) && i === this.state.index:
-          kid = <li key={i} styleName={"selected firstChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"selected firstChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i !== 0 && i === (childrenLength -1) && i != this.state.index:
-          kid = <li key={i} styleName={"item lastChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"item lastChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i !== 0 && i !== (childrenLength -1) && i != this.state.index:
-          kid = <li key={i} styleName={"item"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"item"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i !== 0 && i === (childrenLength -1) && i === this.state.index:
-          kid = <li key={i} styleName={"selected lastChild"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"selected lastChild"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
         case i !== 0 && i !== (childrenLength -1) && i === this.state.index:
-          kid = <li key={i} styleName={"selected"} style={listStyles} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+          kid = <li key={i} styleName={"selected"} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
           break;
       }
       return kid;
@@ -127,9 +116,9 @@ class Dropdown extends React.PureComponent {
 
     return (
       <div {...props} ref={(node) => (this.wrapperRef = node)} className={className} styleName={classes} onClick={this._toggle}>
-        {this.state.customLabel ? <label>{this.state.customLabel}</label> : null}
-        <div styleName={}>
-          <ButtonCore className={buttonClasses} onClick={this.props.clickEvent} onChange={this.props.changeEvent} ref={(buttonNode) => (this.buttonNode = buttonNode)} style={{width: this.state.buttonWidth}}><span>{this.state.output}</span><i styleName="arrow"></i></ButtonCore>
+        {this.props.customLabel ? <label>{this.props.customLabel}</label> : null}
+        <div>
+          <ButtonCore className={buttonClasses} onClick={this.props.clickEvent} onChange={this.props.changeEvent} style={{width: this.state.buttonWidth}}><span>{this.state.output}</span><i styleName="arrow"></i></ButtonCore>
           {this.state.active ? <span styleName={"list"}>{bound_children}</span> : null}
           <input type="hidden" value={this.state.hiddenValue}/>
         </div>
