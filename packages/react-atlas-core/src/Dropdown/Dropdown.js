@@ -106,7 +106,6 @@ class Dropdown extends React.PureComponent {
         "props": this.props
       });
     }
-    console.log("inside custom clicker: ", this.props.onClick)
   }
 
   _toggle = event => {
