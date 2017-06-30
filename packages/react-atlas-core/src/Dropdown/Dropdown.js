@@ -56,10 +56,10 @@ class Dropdown extends React.PureComponent {
    * closes dropdown click outside of browser window
    */
   _onWindowBlur = event => {
-    //if(this.state.active === true) {
-    //  this.setState({'active': false,
-    //                 'zIndex': false});
-    //}
+    if(this.state.active === true) {
+      this.setState({'active': false,
+                     'zIndex': false});
+    }
   };
 
   /**
@@ -108,6 +108,23 @@ class Dropdown extends React.PureComponent {
     }
   }
 
+  _handleChange = () => {
+    if (
+        typeof this.props.onBeforeChange === "undefined" ||
+        this.props.onBeforeChange(this.state.active)
+    ) {
+      if (this.state.active) {
+        this.setState({ active: false }, function() {
+          this._validationHandler(this.props.errorCallback);
+        });
+      } else {
+        this.setState({ active: true }, function() {
+          this._validationHandler(this.props.errorCallback);
+        });
+      }
+    }
+  };
+
   _toggle = event => {
     /* Toggles the dropdown from active to inactive state, sets valid to true and zIndex to true.
       Active is used to show/hide options, valid is used to show/hide error messaging related to validation and zIndex sets a class on the component to ensure it has the proper index on the DOM
@@ -128,7 +145,7 @@ class Dropdown extends React.PureComponent {
       Also sets state of valid depending on user action
       */
     const validationObject = callback
-        ? callback(event, this.state.checked)
+        ? callback(event, this.state.valid)
         : {
             "valid":
               this.props.required && this.state.inputValue !== "" || !this.props.required,
@@ -182,6 +199,8 @@ class Dropdown extends React.PureComponent {
       return kid;
     });
 
+    const dropdownButtonClasses = cx(buttonClasses);
+
     return (
       <div
         ref={(node) => (this.wrapperRef = node)}
@@ -198,15 +217,15 @@ class Dropdown extends React.PureComponent {
         {customLabel ? <div styleName={"labelSpacing"}>{customLabel}{required ? <span styleName={"requiredIndicator"}>*</span> : null}</div> : null}
         <div>
           <ButtonCore
-            className={buttonClasses}
-            style={{width: buttonWidth}}
+            className={dropdownButtonClasses}
+            style={{width: this.state.buttonWidth}}
           >
             <span>{this.state.output}</span><i styleName="arrow"></i>
           </ButtonCore>
           {this.state.active ? <span styleName={"list"}>{bound_children}</span> : null}
           <input type="hidden" value={this.state.inputValue}/>
         </div>
-        {(error) && <div styleName={cx("error_message")}>{this.state.errorMessage}</div>}
+        {(error) && <span styleName={cx("error_message")}>{this.state.errorMessage}</span>}
       </div>
     );
   }
@@ -223,7 +242,7 @@ Dropdown.propTypes = {
     be open or not.*/
   "active": PropTypes.bool,
 
-  /* Boolean value taht tells the dropdown whether the value is valid and controls error message is returns false.*/
+  /* Boolean value that tells the dropdown whether the value is valid and controls error message is returns false.*/
   "valid": PropTypes.bool,
 
   /**
