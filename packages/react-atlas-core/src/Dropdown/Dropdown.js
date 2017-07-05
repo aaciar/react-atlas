@@ -70,15 +70,50 @@ class Dropdown extends React.PureComponent {
     if(!this.props.disabled) {
       const selected = event.target.innerText;
       this.setState({
+        'index': i
+      });
+      const beforeChange = this.props.onBeforeChange ? true : false;
+      console.log("beforeChange", beforeChange)
+      if(beforeChange)
+        console.log("inside click if")
+        this._handleChange(selected);
+      } else {
+        console.log("inside click else")
+        this.setState({
+          'output': selected,
+          'active': !this.state.active,
+          'inputValue': selected,
+          'valid': true,
+          'zIndex': false
+        });
+
+        this._customOnchangeEvent(event);
+        this._customOnclickEvent(event);
+      }
+  };
+
+  _handleChange = (selected) => {
+    if (typeof this.props.onBeforeChange === "undefined" || this.props.onBeforeChange(this.state.active)) {
+      this.setState({
         'output': selected,
         'active': !this.state.active,
-        'index': i,
         'inputValue': selected,
-        'zIndex': false
+        'zIndex': false,
+        'valid': false
+      }, function() {
+        this._validationHandler(this.props.errorCallback);
       });
+
 
       this._customOnchangeEvent(event);
       this._customOnclickEvent(event);
+    } else {
+      this.setState({
+        'output': this.state.output,
+        'active': !this.state.active,
+        'inputValue': this.state.inputValue,
+        'zIndex': false
+      });
     }
   };
 
@@ -108,23 +143,6 @@ class Dropdown extends React.PureComponent {
     }
   }
 
-  _handleChange = () => {
-    if (
-        typeof this.props.onBeforeChange === "undefined" ||
-        this.props.onBeforeChange(this.state.active)
-    ) {
-      if (this.state.active) {
-        this.setState({ active: false }, function() {
-          this._validationHandler(this.props.errorCallback);
-        });
-      } else {
-        this.setState({ active: true }, function() {
-          this._validationHandler(this.props.errorCallback);
-        });
-      }
-    }
-  };
-
   _toggle = event => {
     /* Toggles the dropdown from active to inactive state, sets valid to true and zIndex to true.
       Active is used to show/hide options, valid is used to show/hide error messaging related to validation and zIndex sets a class on the component to ensure it has the proper index on the DOM
@@ -135,6 +153,7 @@ class Dropdown extends React.PureComponent {
         'valid': true,
         'zIndex': !this.state.zIndex
       });
+
       this._customOnclickEvent(event);
     }
 
@@ -216,12 +235,13 @@ class Dropdown extends React.PureComponent {
       >
         {customLabel ? <div styleName={"labelSpacing"}>{customLabel}{required ? <span styleName={"requiredIndicator"}>*</span> : null}</div> : null}
         <div>
-          <ButtonCore
-            className={dropdownButtonClasses}
-            style={{width: this.state.buttonWidth}}
-          >
-            <span>{this.state.output}</span><i styleName="arrow"></i>
-          </ButtonCore>
+          <div style={{width: this.props.buttonWidth + 'px'}}>
+            <ButtonCore
+              className={dropdownButtonClasses}
+            >
+              <span>{this.state.output}</span><i styleName="arrow"></i>
+            </ButtonCore>
+          </div>
           {this.state.active ? <span styleName={"list"}>{bound_children}</span> : null}
           <input type="hidden" value={this.state.inputValue}/>
         </div>
@@ -280,7 +300,7 @@ Dropdown.propTypes = {
 
 Dropdown.defaultProps = {
   "className": "",
-  "buttonWidth": "150",
+  "buttonWidth": "160",
   "required": false,
   "disabled": false
 }
