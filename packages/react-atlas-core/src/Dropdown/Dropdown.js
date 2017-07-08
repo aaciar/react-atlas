@@ -188,7 +188,7 @@ class Dropdown extends React.PureComponent {
   render() {
     const { children, className, required, customLabel, buttonWidth, errorCallback, disabled, ...props } = this.props;
     const active = this.state.active;
-    let error = !this.state.valid && !this.props.disabled ? true : false;
+    const error = !this.state.valid && !this.props.disabled ? true : false;
     let zIndex = this.state.zIndex ? true : false;
     const classes = cx(
       {
