@@ -188,7 +188,7 @@ class Dropdown extends React.PureComponent {
   render() {
     const { children, className, required, customLabel, buttonWidth, errorCallback, disabled, ...props } = this.props;
     const active = this.state.active;
-    const error = !this.state.valid && !this.props.disabled ? true : false;
+    let error = !this.state.valid && !this.props.disabled ? true : false;
     let zIndex = this.state.zIndex ? true : false;
     const classes = cx(
       {
@@ -209,12 +209,11 @@ class Dropdown extends React.PureComponent {
     // Builds the option list from the children passed in
     // firstChild, lastChild and selected each have unique styling and those classes are added here
     const bound_children = children.map((child, i) => {
-      let childrenLength = children.length;
-      let firstChild = i === 0 ? cx("ra_dropdown__firstChild": true) : null;
-      let lastChild = (i === (childrenLength -1)) ? cx("ra_dropdown__lastChild": true) : null;
-      let selected = (i === this.state.index) ? cx("ra_dropdown__selected": true) : null;
-      let childClasses = cx(selected, firstChild, lastChild);
-      let kid = <li key={i} className={"ra_dropdown__item " + childClasses} onClick={this._clickHandler.bind(this, i)}>{child}</li>;
+      let childClasses = cx({
+        "ra_dropdown__selected": i === this.state.index,
+        "ra_dropdown__firstChild": i === 0,
+        "ra_dropdown__lastChild": i === (children.length - 1)});
+      let kid = <li key={i} className={"ra_dropdown__item " + childClasses} onClick={(e) => {this._clickHandler(i, e)}}>{child}</li>;
       return kid;
     });
 
